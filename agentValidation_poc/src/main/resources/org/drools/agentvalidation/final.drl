@@ -14,6 +14,7 @@ rule "final"
 	        	agent.setIsAgentValid( true );
 	    }
 	
+		System.out.println("Final Rule:");
 		System.out.println("In Final response rule agentParentvalue from DRL:agentParentTINValid:" +$agentParentTINValid);
 		System.out.println("In Final response rule agentParentvalue from DRL: agentWritingTINValid" +$agentWritingTINValid);
 end
