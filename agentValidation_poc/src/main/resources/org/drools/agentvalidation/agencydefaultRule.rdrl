@@ -1,0 +1,40 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "agencydefaultRule"
+	dialect "mvel"
+	agenda-group "NA"
+	when
+		policy : Policy( )
+		agentParentTIN : AgentParentTIN( )
+		agentWritingTIN : AgentWritingTIN( )
+		(parentlicense : License( ) from agentParentTIN.licenseRecordList)
+		(writinglicense : License( ) from agentWritingTIN.licenseRecordList)
+		(parentproducer : Producer( ) from agentParentTIN.producerRecordList)
+		(writingproducer : Producer( ) from agentWritingTIN.producerRecordList)
+		(parentappointment : Appointment( ) from agentParentTIN.appointmentRecordList)
+		(writingappointment : Appointment( ) from agentWritingTIN.appointmentRecordList)
+		(certificationwriting : Certification( ) from agentWritingTIN.certificationRecordList)
+		(certificationParent : Certification( ) from agentParentTIN.certificationRecordList)
+		(agencywriting : Agency( ) from agentWritingTIN.agencyRecordList)
+	then
+		parentproducer.setValidationStatus( "Not Applicable" );
+		writingproducer.setValidationStatus( "Not Applicable" );
+		agentParentTIN.setIsAgentProducerParentTinValid( "Not Applicable" );
+		agentParentTIN.setIsAgentLicenseParentTinValid( "Not Applicable" );
+		agentParentTIN.setIsAgentCertificationParentTinValid( "Not Applicable" );
+		agentParentTIN.setIsAgentAppointmentParentTinValid( "Not Applicable" );
+		parentlicense.setValidationStatus( "Not Applicable" );
+		writinglicense.setValidationStatus( "Not Applicable" );
+		parentappointment.setValidationStatus( "Not Applicable" );
+		certificationwriting.setValidationStatus( "Not Applicable" );
+		certificationParent.setValidationStatus( "Not Applicable" );
+		writingappointment.setValidationStatus( "Not Applicable" );
+		agentWritingTIN.setIsAgentProducerWritingTinValid( "Not Applicable" );
+		agentWritingTIN.setIsAgentLicenseWritingTinValid( "Not Applicable" );
+		agentWritingTIN.setIsAgentAppointmentWritingTinValid( "Not Applicable" );
+		agentWritingTIN.setIsAgentCertificationWritingTinValid( "Not Applicable" );
+		agentWritingTIN.setIsAgentAgencyWritingTinValid( "Not Applicable" );
+		agencywriting.setValidationStatus( "Not Applicable" );
+end

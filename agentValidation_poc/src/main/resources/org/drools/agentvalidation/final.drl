@@ -1,0 +1,53 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "final"
+	dialect "mvel"
+	salience -1000
+	when
+		agent : Agent( )
+		agentParenTIN : AgentParentTIN( $agentParentTINValid : isAgentParentTINValid )
+		agentWritingTIN : AgentWritingTIN( $agentWritingTINValid : isAgentWritingTINValid )
+	then
+	    if($agentParentTINValid == true && $agentWritingTINValid == true){
+	        	agent.setIsAgentValid( true );
+	    }
+	
+		System.out.println("In Final response rule agentParentvalue from DRL:agentParentTINValid:" +$agentParentTINValid);
+		System.out.println("In Final response rule agentParentvalue from DRL: agentWritingTINValid" +$agentWritingTINValid);
+end
+
+
+rule "agentParentTINfinal"
+	dialect "mvel"
+	salience -500
+	when
+		agentParenTIN : AgentParentTIN( $isAgentProducerParentTinValid : isAgentProducerParentTinValid, $isAgentLicenseParentTinValid : isAgentLicenseParentTinValid, 
+		$isAgentAppointmentParentTinValid : isAgentAppointmentParentTinValid, $isAgentCertificationParentTinValid : isAgentCertificationParentTinValid, $isAgentAgencyParentTinValid : isAgentAgencyParentTinValid )
+		
+	then
+	    System.out.println("producerTIN value in final rule: " +$isAgentProducerParentTinValid);
+	    if(($isAgentProducerParentTinValid == "true" || $isAgentProducerParentTinValid == "Not Applicable") && ($isAgentLicenseParentTinValid == "true" || $isAgentLicenseParentTinValid == "Not Applicable") && ( $isAgentAppointmentParentTinValid == "true"||  $isAgentAppointmentParentTinValid =="Not Applicable") && ($isAgentCertificationParentTinValid =="true"|| $isAgentCertificationParentTinValid == "Not Applicable") && ( $isAgentAgencyParentTinValid =="true"|| $isAgentAgencyParentTinValid =="Not Applicable") ){
+	        	agentParenTIN.setIsAgentParentTINValid( true );
+	        	 
+	    }
+	
+		
+end
+
+
+rule "agentWritingTINfinal"
+	dialect "mvel"
+	salience -500
+	when
+		agentWritingTIN : AgentWritingTIN( $isAgentProducerWritingTinValid : isAgentProducerWritingTinValid, $isAgentLicenseWritingTinValid : isAgentLicenseWritingTinValid, 
+		$isAgentAppointmentWritingTinValid : isAgentAppointmentWritingTinValid, $isAgentCertificationWritingTinValid : isAgentCertificationWritingTinValid, $isAgentAgencyWritingTinValid : isAgentAgencyWritingTinValid )
+		
+	then
+	    if(($isAgentProducerWritingTinValid == "true" || $isAgentProducerWritingTinValid == "Not Applicable") && ($isAgentLicenseWritingTinValid == "true" || $isAgentLicenseWritingTinValid == "Not Applicable") && ($isAgentAppointmentWritingTinValid == "true" ||  $isAgentAppointmentWritingTinValid == "Not Applicable") && ($isAgentCertificationWritingTinValid == "true"||  $isAgentCertificationWritingTinValid == "Not Applicable")  && ($isAgentAgencyWritingTinValid == "true" || $isAgentAgencyWritingTinValid =="Not Applicable") ){
+	        	agentWritingTIN.setIsAgentWritingTINValid( true );
+	    }
+	
+		
+end

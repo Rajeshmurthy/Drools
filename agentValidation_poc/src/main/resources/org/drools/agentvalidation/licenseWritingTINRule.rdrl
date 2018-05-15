@@ -1,0 +1,15 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "licenseWritingTINRule"
+	dialect "mvel"
+	agenda-group "LicWritingTINRule"
+	when
+		policy : Policy( PolicyEffectiveDate : effDate, PolicyTermDate : termDate, PolicyWritingTIN : writingTIN, PolicyState : state)
+		agentWritingTIN : AgentWritingTIN( )
+		(license : License( state == PolicyState , tin == PolicyWritingTIN , termDate >= PolicyEffectiveDate , effDate <= PolicyEffectiveDate ) from agentWritingTIN.licenseRecordList)
+	then
+		license.setValidationStatus( "Valid Record" );
+		agentWritingTIN.setIsAgentLicenseWritingTinValid( "true" );
+end
