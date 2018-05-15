@@ -1,0 +1,16 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "appointmentParentTINValidation"
+	dialect "mvel"
+	agenda-group "AptParentTINRule"
+	when
+		policy : Policy( policyEffDate : effDate, policyTermDate : termDate, policyParentTIN : parentTIN, policyCOCde : co_cde, policyState : state)
+		agentParentTIN : AgentParentTIN( )
+		(appointment : Appointment( tin == policyParentTIN , state == policyState , co_cde == policyCOCde , apptDate <= policyEffDate , trmtn_no_rnwl_dte >= policyEffDate , trmtn_wth_rnwl_dte >= policyEffDate ) from agentParentTIN.appointmentRecordList)
+	then
+		appointment.setValidationStatus( "Valid Record" );
+		System.out.println("In APPOINTMENT VALIDATION RULE 1");
+		agentParentTIN.setIsAgentAppointmentParentTinValid( "true" );
+end

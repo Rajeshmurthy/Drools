@@ -1,0 +1,15 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "appointmentWritignTINValidation"
+	dialect "mvel"
+	agenda-group "AptWritingTINRule"
+	when
+		policy : Policy( policyEffDate : effDate, policyTermDate : termDate, policyCOCde : co_cde, policyState : state, policyWritingTIN : writingTIN)
+		agentWritingTIN : AgentWritingTIN( )
+		(appointment : Appointment( tin == policyWritingTIN , state == policyState , co_cde == policyCOCde , apptDate <= policyEffDate , trmtn_no_rnwl_dte >= policyEffDate , trmtn_wth_rnwl_dte >= policyEffDate ) from agentWritingTIN.appointmentRecordList)
+	then
+		appointment.setValidationStatus( "Valid Record" );
+		agentWritingTIN.setIsAgentAppointmentWritingTinValid( "true" );
+end

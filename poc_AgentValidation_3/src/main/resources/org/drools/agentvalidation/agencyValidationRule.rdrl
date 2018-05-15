@@ -1,0 +1,15 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "agencyValidationRule"
+	dialect "mvel"
+	agenda-group "AgencyParentTINRule"
+	when
+		policy : Policy( policyEffDate : effDate, policyTermDate : termDate, policyParentTIN : parentTIN)
+		agentParentTIN : AgentParentTIN( )
+		(agency : Agency( tin == policyParentTIN , effDate <= policyEffDate , termDate >= policyEffDate ) from agentParentTIN.agencyRecordList)
+	then
+		agency.setValidationStatus( "Valid Record" );
+		agentParentTIN.setIsAgentAgencyParentTinValid( "true" );
+end

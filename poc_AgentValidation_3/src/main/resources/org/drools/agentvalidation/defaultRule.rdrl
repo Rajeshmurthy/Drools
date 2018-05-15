@@ -1,0 +1,21 @@
+package org.drools.agentvalidation;
+
+import java.lang.Number;
+
+rule "defaultRule"
+	dialect "mvel"
+	agenda-group "N"
+	when
+		policy : Policy( )
+		agentParentTIN : AgentParentTIN( )
+		agentWritingTIN : AgentWritingTIN( )
+		(parentlicense : License( ) from agentParentTIN.licenseRecordList)
+		(writinglicense : License( ) from agentWritingTIN.licenseRecordList)
+		(parentproducer : Producer( ) from agentParentTIN.producerRecordList)
+		(writingproducer : Producer( ) from agentWritingTIN.producerRecordList)
+		(parentappointment : Appointment( ) from agentParentTIN.appointmentRecordList)
+		(writingappointment : Appointment( ) from agentWritingTIN.appointmentRecordList)
+		(certificationwriting : Certification( ) from agentWritingTIN.certificationRecordList)
+	then
+		certificationwriting.setValidationStatus( "Not Applicable" );
+end
